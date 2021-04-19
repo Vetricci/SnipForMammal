@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace SnipForMammal
+﻿namespace SnipForMammal
 {
     public static class Global
     {
