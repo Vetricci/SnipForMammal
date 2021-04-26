@@ -327,7 +327,7 @@ namespace SnipForMammal
             try
             {
                 // Start up Process to begin authorization with Spotify API
-                string authURL = string.Format(CultureInfo.InvariantCulture, "{0}?client_id={1}&response_type={2}&redirect_uri={3}&scope={4}", this.spotifyAPIAuthURL, ApplicationKeys.SpotifyClientId, this.responseType, this.localCallbackURL, this.scopes);
+                string authURL = string.Format(CultureInfo.InvariantCulture, "{0}?client_id={1}&response_type={2}&redirect_uri={3}&scope={4}", this.spotifyAPIAuthURL, ApplicationKeys.client, this.responseType, this.localCallbackURL, this.scopes);
                 Process authorizationProcess = OpenURL(authURL);
 
                 using (HttpListener callbackListener = new HttpListener())
