@@ -354,12 +354,8 @@ namespace SnipForMammal
 
                     foreach (string keyValue in nameValueCollection.AllKeys)
                     {
-                        switch (keyValue)
+                        switch (keyValue.ToLower())
                         {
-                            case "error":
-                                outputString = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", callbackHtmlStart, spotifyAPIAccessDenied, callbackHtmlEnd);
-                                Global.debugConsole?.WriteLine("Failed authorizing through Spotify Auth API.");
-                                break;
                             case "code":
                                 if (Global.autoCloseAuthWindow)
                                 {
@@ -373,6 +369,10 @@ namespace SnipForMammal
                                 }
                                 this.authorizationCode = nameValueCollection[keyValue];
                                 Global.debugConsole?.WriteLine("Successfully authorized through Spotify Auth API.");
+                                break;
+                            case "error":
+                                outputString = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", callbackHtmlStart, spotifyAPIAccessDenied, callbackHtmlEnd);
+                                Global.debugConsole?.WriteLine("Failed authorizing through Spotify Auth API.");
                                 break;
                             default:
                                 break;
@@ -525,6 +525,7 @@ namespace SnipForMammal
         public void CustomTrack(string text)
         {
             //SpotifyTrack customTrack = new SpotifyTrack(string.Empty, text, string.Empty, string.Empty);
+            Global.debugConsole.WriteLine("Setting custom track: " + text);
             this.CurrentPlayingTrack = new SpotifyTrack(text);
         }
 

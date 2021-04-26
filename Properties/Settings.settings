@@ -33,10 +33,10 @@
       <Value Profile="(Default)">"$song" - $artist</Value>
     </Setting>
     <Setting Name="defaultBrowser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Chrome</Value>
+      <Value Profile="(Default)">Opera</Value>
     </Setting>
     <Setting Name="browser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Chrome</Value>
+      <Value Profile="(Default)">Opera</Value>
     </Setting>
   </Settings>
 </SettingsFile>

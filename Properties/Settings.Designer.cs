@@ -145,7 +145,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Chrome")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Opera")]
         public string defaultBrowser {
             get {
                 return ((string)(this["defaultBrowser"]));
@@ -157,7 +157,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Chrome")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Opera")]
         public string browser {
             get {
                 return ((string)(this["browser"]));
