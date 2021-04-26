@@ -23,6 +23,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>https://github.com/Vetricci/SnipForMammal</SupportUrl>
+    <ErrorReportUrl>https://github.com/Vetricci/SnipForMammal</ErrorReportUrl>
+    <ProductName>SnipForMammal</ProductName>
+    <PublisherName>Vetricci</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
