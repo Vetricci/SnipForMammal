@@ -10,6 +10,7 @@ namespace SnipForMammal
         {
             InitializeComponent();
             WriteLine("Initializing...");
+            WriteLine("Version " + Application.ProductVersion);
         }
 
         private delegate void SafeCallTextDelegate(string text);

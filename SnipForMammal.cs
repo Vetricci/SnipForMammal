@@ -24,6 +24,9 @@ namespace SnipForMammal
             InitializeComponent();
             InitializeSnipFile(); 
             ConfigureUpdateCurrentTrackPlayingTimer();
+
+            // Add the version to Version toolstripmenuitem
+            toolStripMenuItem_Version.Text += Application.ProductVersion;
         }
 
         private void InitializeSnipFile()

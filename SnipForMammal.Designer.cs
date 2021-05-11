@@ -72,45 +72,45 @@ namespace SnipForMammal
             this.toolStripSeparator3,
             this.toolStripMenuItem_Exit});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(209, 176);
+            this.contextMenuStrip.Size = new System.Drawing.Size(188, 198);
             // 
             // toolStripMenuItem_Version
             // 
             this.toolStripMenuItem_Version.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem_Version.Enabled = false;
             this.toolStripMenuItem_Version.Name = "toolStripMenuItem_Version";
-            this.toolStripMenuItem_Version.Size = new System.Drawing.Size(208, 22);
-            this.toolStripMenuItem_Version.Text = "Snip for Mammal v1.0.0.0";
+            this.toolStripMenuItem_Version.Size = new System.Drawing.Size(187, 22);
+            this.toolStripMenuItem_Version.Text = "Snip for Mammal ";
             this.toolStripMenuItem_Version.ToolTipText = "Program version";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(205, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
             // 
             // toolStripMenuItem_TrackHistory
             // 
             this.toolStripMenuItem_TrackHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem_TrackHistory.Name = "toolStripMenuItem_TrackHistory";
-            this.toolStripMenuItem_TrackHistory.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_TrackHistory.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_TrackHistory.Text = "Track History";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(205, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
             // 
             // toolStripMenuItem_Settings
             // 
             this.toolStripMenuItem_Settings.Name = "toolStripMenuItem_Settings";
-            this.toolStripMenuItem_Settings.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_Settings.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_Settings.Text = "Settings";
             this.toolStripMenuItem_Settings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
             // toolStripMenuItem_CustomText
             // 
             this.toolStripMenuItem_CustomText.Name = "toolStripMenuItem_CustomText";
-            this.toolStripMenuItem_CustomText.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_CustomText.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_CustomText.Text = "Custom Text";
             this.toolStripMenuItem_CustomText.Click += new System.EventHandler(this.toolStripMenuItem_CustomText_Click);
             // 
@@ -118,7 +118,7 @@ namespace SnipForMammal
             // 
             this.toolStripMenuItem_ForceUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem_ForceUpdate.Name = "toolStripMenuItem_ForceUpdate";
-            this.toolStripMenuItem_ForceUpdate.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_ForceUpdate.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_ForceUpdate.Text = "Force Update";
             this.toolStripMenuItem_ForceUpdate.Click += new System.EventHandler(this.toolStripMenuItem_ForceUpdate_Click);
             // 
@@ -126,20 +126,20 @@ namespace SnipForMammal
             // 
             this.toolStripMenuItem_ShowDebug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem_ShowDebug.Name = "toolStripMenuItem_ShowDebug";
-            this.toolStripMenuItem_ShowDebug.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_ShowDebug.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_ShowDebug.Text = "Show Debug Console";
             this.toolStripMenuItem_ShowDebug.Click += new System.EventHandler(this.toolStripMenuItem_ShowDebug_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(205, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(184, 6);
             // 
             // toolStripMenuItem_Exit
             // 
             this.toolStripMenuItem_Exit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripMenuItem_Exit.Name = "toolStripMenuItem_Exit";
-            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(208, 22);
+            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
