@@ -103,15 +103,19 @@ namespace SnipForMammal
                 Global.debugConsole?.WriteLine("Interval for timer updateAuthToken updated to " + Global.updateAuthTokenInterval + "ms");
             }
 
-            string downloadedJson;
+            string downloadedJson = string.Empty;
             if (!string.IsNullOrEmpty(this.refreshToken))
             {
+                Console.WriteLine("SpotifyAddressContactType.AuthorizationRefresh");
                 downloadedJson = this.DownloadJson(spotifyAPITokenURL, SpotifyAddressContactType.AuthorizationRefresh);
             }
             else
             {
+                Console.WriteLine("SpotifyAddressContactType.Authorization");
                 downloadedJson = this.DownloadJson(spotifyAPITokenURL, SpotifyAddressContactType.Authorization);
             }
+
+            Console.WriteLine(downloadedJson);
 
             // Set the token to be blank until filled
             this.authorizationToken = string.Empty;
@@ -125,9 +129,17 @@ namespace SnipForMammal
                 {
                     this.authorizationToken = jsonSummary.access_token.ToString();
                     this.authorizationTokenExpiration = Convert.ToDouble((long)jsonSummary.expires_in);
-                    this.refreshToken = jsonSummary.refresh_token.ToString();
+                    if (jsonSummary.refresh_token != null)
+                    {
+                        this.refreshToken = jsonSummary.refresh_token.ToString();
+                    }    
 
                     this.updateAuthToken.Interval = this.authorizationTokenExpiration * 1000.0;
+
+                    // Debug output
+                    Global.debugConsole?.WriteLine("authToken: " + this.authorizationToken);
+                    Global.debugConsole?.WriteLine("authTokenExpiration: " + this.authorizationTokenExpiration);
+                    Global.debugConsole?.WriteLine("refreshToken: " + this.refreshToken);
                 }
             }
             else
@@ -408,6 +420,7 @@ namespace SnipForMammal
                     switch (spotifyAddressContactType)
                     {
                         case SpotifyAddressContactType.Authorization:
+                            Global.debugConsole?.WriteLine("DownloadJson type Auth.");
                             usePostMethodInsteadOfGet = true;
                             postParameters = string.Format(CultureInfo.InvariantCulture, "grant_type=authorization_code&code={0}&redirect_uri={1}", this.authorizationCode, this.localCallbackURL);
                             jsonWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -500,17 +513,20 @@ namespace SnipForMammal
                     this.spotifyHandle = IntPtr.Zero;
                     break;
 
-                case ResetReason.ForceUpdateRequested:
-                    Global.debugConsole?.WriteLine("Reset requested. Reason: Force update requested by user.");
-                    this.spotifyRunning = false;
-                    this.spotifyHandle = IntPtr.Zero;
-                    ResetUpdateSpotifyTrackInformationTimer();
-                    break;
-
                 case ResetReason.InvalidJson:
                     Global.debugConsole?.WriteLine("Reset requested. Reason: Invalid Json.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
+                    break;
+
+                case ResetReason.ForceUpdateRequested:
+                    Global.debugConsole?.WriteLine("Reset requested. Reason: Force update requested by user.");
+                    this.spotifyRunning = false;
+                    this.spotifyHandle = IntPtr.Zero;
+                    //this.refreshToken = String.Empty;
+                    //this.authorizationToken = String.Empty;
+                    ResetUpdateSpotifyTrackInformationTimer();
+                    //ResetUpdateAuthTokenTimer();
                     break;
                 default:
                     break;
