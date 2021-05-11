@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SnipForMammal
@@ -38,6 +39,19 @@ namespace SnipForMammal
                 e.Cancel = true;
                 this.Hide();
             }
+        }
+
+        private void ToolStripMenuItem_FileClose_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void ToolStripMenuItem_FileOutput_Click(object sender, EventArgs e)
+        {
+            string timestamp = DateTime.Now.ToString("MM-dd-yyyy HH-mm-ss");
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DebugConsoleOutput " + timestamp + ".txt");
+
+            File.WriteAllText(filePath, this.ConsoleTextBox.Text);
         }
     }
 }
