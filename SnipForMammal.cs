@@ -27,6 +27,9 @@ namespace SnipForMammal
 
             // Add the version to Version toolstripmenuitem
             toolStripMenuItem_Version.Text += Application.ProductVersion;
+
+            // Handles app exit
+            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
         }
 
         private void InitializeSnipFile()
@@ -247,6 +250,12 @@ namespace SnipForMammal
             Global.customTextEntryForm.Show();
         }
 
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            // Prepare Snip file for next time use.
+            InitializeSnipFile();
+        }
     }
 
 
