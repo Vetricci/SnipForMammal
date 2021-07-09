@@ -46,6 +46,7 @@ namespace SnipForMammal
             this.PictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.toolStripMenuItem_RestartSpotify = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -64,15 +65,16 @@ namespace SnipForMammal
             this.toolStripMenuItem_Version,
             this.toolStripSeparator1,
             this.toolStripMenuItem_TrackHistory,
+            this.toolStripMenuItem_CustomText,
             this.toolStripSeparator2,
             this.toolStripMenuItem_Settings,
-            this.toolStripMenuItem_CustomText,
             this.toolStripMenuItem_ForceUpdate,
+            this.toolStripMenuItem_RestartSpotify,
             this.toolStripMenuItem_ShowDebug,
             this.toolStripSeparator3,
             this.toolStripMenuItem_Exit});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(188, 198);
+            this.contextMenuStrip.Size = new System.Drawing.Size(188, 220);
             // 
             // toolStripMenuItem_Version
             // 
@@ -184,6 +186,13 @@ namespace SnipForMammal
     "banana for your viewing pleasure.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // toolStripMenuItem_RestartSpotify
+            // 
+            this.toolStripMenuItem_RestartSpotify.Name = "toolStripMenuItem_RestartSpotify";
+            this.toolStripMenuItem_RestartSpotify.Size = new System.Drawing.Size(187, 22);
+            this.toolStripMenuItem_RestartSpotify.Text = "Restart Spotify";
+            this.toolStripMenuItem_RestartSpotify.Click += new System.EventHandler(this.toolStripMenuItem_RestartSpotify_Click);
+            // 
             // SnipForMammal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -219,6 +228,7 @@ namespace SnipForMammal
         private System.Windows.Forms.PictureBox PictureBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RestartSpotify;
     }
 }
 

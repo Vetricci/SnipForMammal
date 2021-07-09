@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -255,6 +257,66 @@ namespace SnipForMammal
         {
             // Prepare Snip file for next time use.
             InitializeSnipFile();
+        }
+
+        private void toolStripMenuItem_RestartSpotify_Click(object sender, EventArgs e)
+        {
+            bool result = KillSpotifyTasks();
+            if (!result)
+            {
+                LaunchSpotify();
+            }
+            else
+            {
+                MessageBox.Show("There was a problem closing all Spotify processes. Please close them manually in Task Manager.");
+            }
+            
+            
+        }
+
+        private bool KillSpotifyTasks()
+        {
+            Global.debugConsole?.WriteLine("Killing all Spotify processes.");
+            bool processAlive = false;
+
+            // Fetch all Spotify processes
+            Process[] allRunningProcesses = Process.GetProcessesByName("Spotify");
+            Global.debugConsole?.WriteLine("Found " + allRunningProcesses.Length + " processes");
+
+            if (allRunningProcesses.Length > 0)
+            {
+                processAlive = true;
+                // Kill all running Spotify processes
+                foreach (Process process in allRunningProcesses)
+                {
+                    Global.debugConsole?.WriteLine("    Killing PID " + process.Id);
+                    process.Kill();
+                }
+
+                // Pause before rechecking for processes
+                Thread.Sleep(100);
+
+                // Recheck for any Spotify processes. If some are still alive user will have to manually terminate.
+                allRunningProcesses = Process.GetProcessesByName("Spotify");
+                if (allRunningProcesses.Length > 0)
+                {
+                    processAlive = true;
+                    Global.debugConsole?.WriteLine("Not all Spotify processes were terminated. Manual termination needed in Task Manager.");
+                }
+                else
+                {
+                    processAlive = false;
+                    Global.debugConsole?.WriteLine("All Spotify processes successfully terminated.");
+                }
+            }
+
+            return processAlive;
+        }
+
+        private void LaunchSpotify()
+        {
+            Global.debugConsole?.WriteLine("Launching Spotify.");
+            Process.Start("Spotify");
         }
     }
 
