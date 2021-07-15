@@ -8,7 +8,10 @@ using System.Windows.Forms;
 
 namespace SnipForMammal
 {
+    using SimpleJson;
+    using System.Net;
     using Timer = System.Timers.Timer;
+
     public partial class SnipForMammal : Form
     {
         private delegate void SafeCallTextDelegate(string text);
@@ -23,6 +26,9 @@ namespace SnipForMammal
 
         public SnipForMammal()
         {
+            // Handles app exit
+            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+
             InitializeComponent();
             InitializeSnipFile(); 
             ConfigureUpdateCurrentTrackPlayingTimer();
@@ -30,8 +36,8 @@ namespace SnipForMammal
             // Add the version to Version toolstripmenuitem
             toolStripMenuItem_Version.Text += Application.ProductVersion;
 
-            // Handles app exit
-            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+            // Check for updates;
+            CheckIfUpdateAvailable();
         }
 
         private void InitializeSnipFile()
@@ -317,6 +323,48 @@ namespace SnipForMammal
         {
             Global.debugConsole?.WriteLine("Launching Spotify.");
             Process.Start("Spotify");
+        }
+
+        private void toolStripMenuItem_Version_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"https://github.com/Vetricci/SnipForMammal/releases/latest");
+        }
+
+        private void CheckIfUpdateAvailable()
+        {
+            try
+            {
+                using (WebClientWithShortTimeout jsonWebClient = new WebClientWithShortTimeout())
+                {
+                    string urlGithubApi = @"https://api.github.com/repos/Vetricci/SnipForMammal/releases/latest";
+                    string downloadedJson = string.Empty;
+
+                    // Prepare web client
+                    jsonWebClient.Headers.Add("User-Agent", "SnipForMammal/v1");
+                    jsonWebClient.Encoding = System.Text.Encoding.UTF8;
+
+                    // Fetch JSON
+                    downloadedJson = jsonWebClient.DownloadString(urlGithubApi);
+
+                    // Deserialize JSON
+                    dynamic json = SimpleJson.DeserializeObject(downloadedJson);
+
+                    // Get version
+                    dynamic tag_name = (string)json.tag_name;
+                    string versionGit = tag_name + ".0.0";
+
+                    Global.debugConsole?.WriteLine("Git version " + versionGit);
+                    if (versionGit != Application.ProductVersion)
+                    {
+                        toolStripMenuItem_Version.Text = "New update available!";
+                    }
+                }
+            }
+            catch (WebException webException)
+            {
+                Global.debugConsole?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
+                Global.debugConsole?.WriteLine("     Exception Message: " + webException.Message);
+            }
         }
     }
 

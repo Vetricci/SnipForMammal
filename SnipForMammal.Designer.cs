@@ -36,17 +36,17 @@ namespace SnipForMammal
             this.toolStripMenuItem_Version = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_TrackHistory = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CustomText = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_Settings = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_CustomText = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ForceUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_RestartSpotify = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ShowDebug = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.PictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStripMenuItem_RestartSpotify = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -79,11 +79,11 @@ namespace SnipForMammal
             // toolStripMenuItem_Version
             // 
             this.toolStripMenuItem_Version.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripMenuItem_Version.Enabled = false;
             this.toolStripMenuItem_Version.Name = "toolStripMenuItem_Version";
             this.toolStripMenuItem_Version.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_Version.Text = "Snip for Mammal ";
             this.toolStripMenuItem_Version.ToolTipText = "Program version";
+            this.toolStripMenuItem_Version.Click += new System.EventHandler(this.toolStripMenuItem_Version_Click);
             // 
             // toolStripSeparator1
             // 
@@ -97,6 +97,13 @@ namespace SnipForMammal
             this.toolStripMenuItem_TrackHistory.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_TrackHistory.Text = "Track History";
             // 
+            // toolStripMenuItem_CustomText
+            // 
+            this.toolStripMenuItem_CustomText.Name = "toolStripMenuItem_CustomText";
+            this.toolStripMenuItem_CustomText.Size = new System.Drawing.Size(187, 22);
+            this.toolStripMenuItem_CustomText.Text = "Custom Text";
+            this.toolStripMenuItem_CustomText.Click += new System.EventHandler(this.toolStripMenuItem_CustomText_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -109,13 +116,6 @@ namespace SnipForMammal
             this.toolStripMenuItem_Settings.Text = "Settings";
             this.toolStripMenuItem_Settings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
-            // toolStripMenuItem_CustomText
-            // 
-            this.toolStripMenuItem_CustomText.Name = "toolStripMenuItem_CustomText";
-            this.toolStripMenuItem_CustomText.Size = new System.Drawing.Size(187, 22);
-            this.toolStripMenuItem_CustomText.Text = "Custom Text";
-            this.toolStripMenuItem_CustomText.Click += new System.EventHandler(this.toolStripMenuItem_CustomText_Click);
-            // 
             // toolStripMenuItem_ForceUpdate
             // 
             this.toolStripMenuItem_ForceUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -123,6 +123,13 @@ namespace SnipForMammal
             this.toolStripMenuItem_ForceUpdate.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_ForceUpdate.Text = "Force Update";
             this.toolStripMenuItem_ForceUpdate.Click += new System.EventHandler(this.toolStripMenuItem_ForceUpdate_Click);
+            // 
+            // toolStripMenuItem_RestartSpotify
+            // 
+            this.toolStripMenuItem_RestartSpotify.Name = "toolStripMenuItem_RestartSpotify";
+            this.toolStripMenuItem_RestartSpotify.Size = new System.Drawing.Size(187, 22);
+            this.toolStripMenuItem_RestartSpotify.Text = "Restart Spotify";
+            this.toolStripMenuItem_RestartSpotify.Click += new System.EventHandler(this.toolStripMenuItem_RestartSpotify_Click);
             // 
             // toolStripMenuItem_ShowDebug
             // 
@@ -185,13 +192,6 @@ namespace SnipForMammal
             this.label1.Text = "You definitely should never be able to see this. If you do let me know. Here\'s a " +
     "banana for your viewing pleasure.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // toolStripMenuItem_RestartSpotify
-            // 
-            this.toolStripMenuItem_RestartSpotify.Name = "toolStripMenuItem_RestartSpotify";
-            this.toolStripMenuItem_RestartSpotify.Size = new System.Drawing.Size(187, 22);
-            this.toolStripMenuItem_RestartSpotify.Text = "Restart Spotify";
-            this.toolStripMenuItem_RestartSpotify.Click += new System.EventHandler(this.toolStripMenuItem_RestartSpotify_Click);
             // 
             // SnipForMammal
             // 

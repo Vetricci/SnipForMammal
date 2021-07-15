@@ -460,7 +460,7 @@ namespace SnipForMammal
                 }
                 catch (WebException webException)
                 {
-                    Global.debugConsole?.WriteLine("WebException thrown in DownloadJson()");
+                    Global.debugConsole?.WriteLine("WebException thrown in Spotify.DownloadJson()");
                     Global.debugConsole?.WriteLine("     Exception Message: " + webException.Message);
 
                     // Catch "(503) Server Unavailable"
