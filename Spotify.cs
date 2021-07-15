@@ -523,10 +523,7 @@ namespace SnipForMammal
                     Global.debugConsole?.WriteLine("Reset requested. Reason: Force update requested by user.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
-                    //this.refreshToken = String.Empty;
-                    //this.authorizationToken = String.Empty;
                     ResetUpdateSpotifyTrackInformationTimer();
-                    //ResetUpdateAuthTokenTimer();
                     break;
                 default:
                     break;
@@ -540,7 +537,6 @@ namespace SnipForMammal
 
         public void CustomTrack(string text)
         {
-            //SpotifyTrack customTrack = new SpotifyTrack(string.Empty, text, string.Empty, string.Empty);
             Global.debugConsole.WriteLine("Setting custom track: " + text);
             this.CurrentPlayingTrack = new SpotifyTrack(text);
         }
