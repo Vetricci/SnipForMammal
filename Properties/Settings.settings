@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="updateAuthTokenInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2000</Value>
+      <Value Profile="(Default)">2500</Value>
     </Setting>
     <Setting Name="updateSpotifyTrackInfoInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2000</Value>
+      <Value Profile="(Default)">2500</Value>
     </Setting>
     <Setting Name="autoCloseAuthWindow" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -18,10 +18,10 @@
       <Value Profile="(Default)">"$song" - $artist</Value>
     </Setting>
     <Setting Name="defaultUpdateAuthTokenInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2000</Value>
+      <Value Profile="(Default)">2500</Value>
     </Setting>
     <Setting Name="defaultUpdateSpotifyTrackInfoInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2000</Value>
+      <Value Profile="(Default)">2500</Value>
     </Setting>
     <Setting Name="defaultAutoCloseAuthWindow" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

@@ -420,7 +420,7 @@ namespace SnipForMammal
                     switch (spotifyAddressContactType)
                     {
                         case SpotifyAddressContactType.Authorization:
-                            Global.debugConsole?.WriteLine("DownloadJson type Auth.");
+                            Global.debugConsole?.WriteLine("Downloading authorization json.");
                             usePostMethodInsteadOfGet = true;
                             postParameters = string.Format(CultureInfo.InvariantCulture, "grant_type=authorization_code&code={0}&redirect_uri={1}", this.authorizationCode, this.localCallbackURL);
                             jsonWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -428,7 +428,7 @@ namespace SnipForMammal
                             break;
 
                         case SpotifyAddressContactType.AuthorizationRefresh:
-                            Global.debugConsole?.WriteLine("DownloadJson type AuthRefresh.");
+                            Global.debugConsole?.WriteLine("Downloading refresh authorization json.");
                             usePostMethodInsteadOfGet = true;
                             postParameters = string.Format(CultureInfo.InvariantCulture, "grant_type=refresh_token&refresh_token={0}", this.refreshToken);
                             jsonWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -456,6 +456,10 @@ namespace SnipForMammal
                         downloadedJson = jsonWebClient.DownloadString(jsonAddress);
                     }
 
+                    if (downloadedJson.Length > 0 & downloadedJson.Length < 1000)
+                    {
+                        Global.debugConsole?.WriteLine(downloadedJson);
+                    }
                     return downloadedJson;
                 }
                 catch (WebException webException)

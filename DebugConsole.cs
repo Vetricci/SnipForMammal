@@ -6,11 +6,18 @@ namespace SnipForMammal
 {
     public partial class DebugConsole : Form
     {
+        string logFile = Path.Combine(Path.GetTempPath(), "SnipForMammalLog.txt");
+
         public DebugConsole()
         {
             InitializeComponent();
             WriteLine("Initializing...");
             WriteLine("Version " + Application.ProductVersion);
+
+            // Prepare log file
+            WriteLine("Preparing log file...");
+            WriteLine("Log file location: " + logFile);
+            File.WriteAllText(logFile, string.Empty);
         }
 
         private delegate void SafeCallTextDelegate(string text);
@@ -23,10 +30,16 @@ namespace SnipForMammal
             }
             else
             {
-                this.ConsoleTextBox.AppendText("[" + GetTimestamp() + "] " + text + Environment.NewLine);
-                Console.WriteLine(text);
+                string message = "[" + GetTimestamp() + "] " + text;
+                this.ConsoleTextBox.AppendText(message + Environment.NewLine);
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.WriteLine(message);
+                }
+                Console.WriteLine(message);
             }
         }
+
 
         private string GetTimestamp()
         {
@@ -42,17 +55,5 @@ namespace SnipForMammal
             }
         }
 
-        private void ToolStripMenuItem_FileClose_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-        }
-
-        private void ToolStripMenuItem_FileOutput_Click(object sender, EventArgs e)
-        {
-            string timestamp = DateTime.Now.ToString("MM-dd-yyyy HH-mm-ss");
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DebugConsoleOutput " + timestamp + ".txt");
-
-            File.WriteAllText(filePath, this.ConsoleTextBox.Text);
-        }
     }
 }

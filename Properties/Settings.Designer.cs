@@ -25,7 +25,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
         public int updateAuthTokenInterval {
             get {
                 return ((int)(this["updateAuthTokenInterval"]));
@@ -37,7 +37,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
         public int updateSpotifyTrackInfoInterval {
             get {
                 return ((int)(this["updateSpotifyTrackInfoInterval"]));
@@ -85,7 +85,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
         public int defaultUpdateAuthTokenInterval {
             get {
                 return ((int)(this["defaultUpdateAuthTokenInterval"]));
@@ -97,7 +97,7 @@ namespace SnipForMammal.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
         public int defaultUpdateSpotifyTrackInfoInterval {
             get {
                 return ((int)(this["defaultUpdateSpotifyTrackInfoInterval"]));
