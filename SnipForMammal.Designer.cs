@@ -79,6 +79,7 @@ namespace SnipForMammal
             // toolStripMenuItem_Version
             // 
             this.toolStripMenuItem_Version.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripMenuItem_Version.Enabled = false;
             this.toolStripMenuItem_Version.Name = "toolStripMenuItem_Version";
             this.toolStripMenuItem_Version.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItem_Version.Text = "Snip for Mammal ";

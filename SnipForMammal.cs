@@ -34,7 +34,9 @@ namespace SnipForMammal
             ConfigureUpdateCurrentTrackPlayingTimer();
 
             // Add the version to Version toolstripmenuitem
-            toolStripMenuItem_Version.Text += Application.ProductVersion;
+            Version ver = new Version(Application.ProductVersion);
+            string version = string.Format("v{0}.{1}", ver.Major, ver.Minor);
+            toolStripMenuItem_Version.Text += version;
 
             // Check for updates;
             CheckIfUpdateAvailable();
@@ -258,7 +260,6 @@ namespace SnipForMammal
             Global.customTextEntryForm.Show();
         }
 
-
         private void OnApplicationExit(object sender, EventArgs e)
         {
             // Prepare Snip file for next time use.
@@ -357,6 +358,7 @@ namespace SnipForMammal
                     if (versionGit != Application.ProductVersion)
                     {
                         toolStripMenuItem_Version.Text = "New update available!";
+                        toolStripMenuItem_Version.Enabled = true;
                     }
                 }
             }
