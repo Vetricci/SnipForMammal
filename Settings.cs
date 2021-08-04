@@ -37,7 +37,7 @@ namespace SnipForMammal
             {
                 Global.outputFormat = textBoxSettingsOutputFormat.Text;
                 Properties.Settings.Default.outputFormat = textBoxSettingsOutputFormat.Text;
-                Global.debugConsole?.WriteLine("Setting \"OutputFormat\" new value: " + Global.outputFormat);
+                Global.log.WriteLine("Setting \"OutputFormat\" new value: " + Global.outputFormat);
             }
 
             // InternalAPIUpdateInterval
@@ -46,7 +46,7 @@ namespace SnipForMammal
             {
                 Global.updateCurrentTrackPlayingInterval = newInt;
                 Properties.Settings.Default.updateCurrentTrackPlayingInterval = newInt;
-                Global.debugConsole?.WriteLine("Setting \"InternalAPIUpdateInterval\" new value: " + Global.updateCurrentTrackPlayingInterval);
+                Global.log.WriteLine("Setting \"InternalAPIUpdateInterval\" new value: " + Global.updateCurrentTrackPlayingInterval);
             }
 
             // SpotifyAPIUpdateInterval
@@ -55,7 +55,7 @@ namespace SnipForMammal
             {
                 Global.updateSpotifyTrackInfoInterval = newInt;
                 Properties.Settings.Default.updateSpotifyTrackInfoInterval = newInt;
-                Global.debugConsole?.WriteLine("Setting \"SpotifyAPIUpdateInterval\" new value: " + Global.updateSpotifyTrackInfoInterval);
+                Global.log.WriteLine("Setting \"SpotifyAPIUpdateInterval\" new value: " + Global.updateSpotifyTrackInfoInterval);
             }
 
             // SpotifyAuthAPIUpdateInterval
@@ -64,7 +64,7 @@ namespace SnipForMammal
             {
                 Global.updateAuthTokenInterval = newInt;
                 Properties.Settings.Default.updateAuthTokenInterval = newInt;
-                Global.debugConsole?.WriteLine("Setting \"SpotifyAuthAPIUpdateInterval\" new value: " + Global.updateAuthTokenInterval);
+                Global.log.WriteLine("Setting \"SpotifyAuthAPIUpdateInterval\" new value: " + Global.updateAuthTokenInterval);
             }
 
             // AutoCloseAuthWindow
@@ -73,7 +73,7 @@ namespace SnipForMammal
             {
                 Global.autoCloseAuthWindow = newBool;
                 Properties.Settings.Default.autoCloseAuthWindow = newBool;
-                Global.debugConsole?.WriteLine("Setting \"AutoCloseAuthWindow\" new value: " + Global.autoCloseAuthWindow);
+                Global.log.WriteLine("Setting \"AutoCloseAuthWindow\" new value: " + Global.autoCloseAuthWindow);
             }
 
             // DefaultBrowser
@@ -81,7 +81,7 @@ namespace SnipForMammal
             {
                 Global.browser = comboBox_defaultBrowser.Text;
                 Properties.Settings.Default.browser = comboBox_defaultBrowser.Text;
-                Global.debugConsole?.WriteLine("Setting \"DefaultBrowser\" new value: " + Global.browser);
+                Global.log.WriteLine("Setting \"DefaultBrowser\" new value: " + Global.browser);
             }
 
             // Save everything
@@ -93,7 +93,7 @@ namespace SnipForMammal
 
         private void buttonRestoreDefaults_Click(object sender, EventArgs e)
         {
-            Global.debugConsole?.WriteLine("Restoring default settings.");
+            Global.log.WriteLine("Restoring default settings.");
 
             // OutputFormat
             textBoxSettingsOutputFormat.Text = Properties.Settings.Default.defaultOutputFormat;

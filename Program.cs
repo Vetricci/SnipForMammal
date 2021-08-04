@@ -13,7 +13,7 @@ namespace SnipForMammal
         static void Main()
         {
             // Run only if no other instance is already running.
-            Process[] allProcesses = System.Diagnostics.Process.GetProcesses();
+            Process[] allProcesses = Process.GetProcesses();
             int numSFMRunning = 0;
             foreach (Process process in allProcesses)
             {
@@ -30,20 +30,20 @@ namespace SnipForMammal
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 // Globals
+                Global.log = new Log();
                 Global.outputFormat = Properties.Settings.Default.outputFormat;
                 Global.updateAuthTokenInterval = Properties.Settings.Default.updateAuthTokenInterval;
                 Global.updateSpotifyTrackInfoInterval = Properties.Settings.Default.updateSpotifyTrackInfoInterval;
                 Global.updateCurrentTrackPlayingInterval = Properties.Settings.Default.updateCurrentTrackPlayingInterval;
                 Global.autoCloseAuthWindow = Properties.Settings.Default.autoCloseAuthWindow;
                 Global.browser = Properties.Settings.Default.browser;
-                Global.debugConsole = new DebugConsole();
                 Global.settings = new Settings();
                 Global.customTextEntryForm = new CustomTextEntryForm();
                 Global.spotify = new Spotify();
-                Global.snipForMammal = new SnipForMammal(); // Keep this line out of Application.Run() to ensure the form never shows and instantly minimizes.
+                //Global.snipForMammal = new SnipForMammal(); // Keep this line out of Application.Run() to ensure the form never shows and instantly minimizes.
 
                 // Run
-                Application.Run();
+                Application.Run(new SnipForMammal());
             }
             else
             {

@@ -8,7 +8,7 @@
             set;
         }
 
-        public static DebugConsole debugConsole
+        public static Log log
         {
             get;
             set;
