@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace SnipForMammal
@@ -12,9 +13,18 @@ namespace SnipForMammal
         static void Main()
         {
             // Run only if no other instance is already running.
-            //System.Diagnostics.Process[] processSnipForMammalInstances = System.Diagnostics.Process.GetProcessesByName("SnipForMammal");
+            Process[] allProcesses = System.Diagnostics.Process.GetProcesses();
+            int numSFMRunning = 0;
+            foreach (Process process in allProcesses)
+            {
+                if (process.ProcessName.Contains("SnipForMammal"))
+                {
+                    numSFMRunning++;
+                }
+            }
+            Console.WriteLine("SFM: " + numSFMRunning);
 
-            if (System.Diagnostics.Process.GetProcessesByName("SnipForMammal").Length <= 1)
+            if (numSFMRunning < 2)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
