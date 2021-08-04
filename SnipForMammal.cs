@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Timers;
@@ -9,7 +10,6 @@ using System.Windows.Forms;
 namespace SnipForMammal
 {
     using SimpleJson;
-    using System.Net;
     using Timer = System.Timers.Timer;
 
     public partial class SnipForMammal : Form
@@ -59,7 +59,12 @@ namespace SnipForMammal
             try
             {
                 Global.debugConsole?.WriteLine("Writting to Snip File: " + text);
-                File.WriteAllText(this.snipFilePath, text);
+
+                using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
+                {
+                    sw.WriteLine(text);
+                }
+
             }
             catch (FileNotFoundException e)
             {
