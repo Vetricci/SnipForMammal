@@ -12,6 +12,7 @@ namespace SnipForMammal
         {
             InitializeComponent();
             WriteLine("Initializing...");
+            WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss:fff"));
             WriteLine("Version " + Application.ProductVersion);
 
             // Prepare log file
