@@ -56,21 +56,11 @@ namespace SnipForMammal
 
         private void WriteToSnipFile(string text)
         {
-            try
-            {
-                Global.debugConsole?.WriteLine("Writting to Snip File: " + text);
+            Global.debugConsole?.WriteLine("Writting to Snip File: " + text);
 
-                using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
-                {
-                    sw.WriteLine(text);
-                }
-
-            }
-            catch (FileNotFoundException e)
+            using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
             {
-                Global.debugConsole?.WriteLine("FileNotFoundException Caught in WriteToSnipFile: " + e.FileName);
-                Global.debugConsole?.WriteLine("Attempting to reinitialize Snip file...");
-                InitializeSnipFile();
+                sw.WriteLine(text);
             }
         }
 
