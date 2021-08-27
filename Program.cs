@@ -42,10 +42,10 @@ namespace SnipForMammal
                 Global.settings = new Settings();
                 Global.customTextEntryForm = new CustomTextEntryForm();
                 Global.spotify = new Spotify();
-                //Global.snipForMammal = new SnipForMammal(); // Keep this line out of Application.Run() to ensure the form never shows and instantly minimizes.
+                Global.snipForMammal = new SnipForMammal(); // Keep this line out of Application.Run() to ensure the form never shows and instantly minimizes.
 
                 // Run
-                Application.Run(new SnipForMammal());
+                Application.Run();
             }
             else
             {
