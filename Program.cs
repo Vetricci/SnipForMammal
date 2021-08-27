@@ -14,23 +14,25 @@ namespace SnipForMammal
         {
             // Run only if no other instance is already running.
             Process[] allProcesses = Process.GetProcesses();
-            int numSFMRunning = 0;
+            int numSnipInstancesRunning = 0;
             foreach (Process process in allProcesses)
             {
                 if (process.ProcessName.Contains("SnipForMammal"))
                 {
-                    numSFMRunning++;
+                    numSnipInstancesRunning++;
                 }
             }
-            Console.WriteLine("SFM: " + numSFMRunning);
+            Console.WriteLine("Snip Instances Running: " + numSnipInstancesRunning);
 
-            if (numSFMRunning < 2)
+            if (numSnipInstancesRunning < 2)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 // Globals
                 Global.log = new Log();
+                Global.lastTrack = null;
+                Global.currentTrack = null;
                 Global.outputFormat = Properties.Settings.Default.outputFormat;
                 Global.updateAuthTokenInterval = Properties.Settings.Default.updateAuthTokenInterval;
                 Global.updateSpotifyTrackInfoInterval = Properties.Settings.Default.updateSpotifyTrackInfoInterval;

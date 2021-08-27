@@ -43,7 +43,6 @@ namespace SnipForMammal
             this.toolStripMenuItem_RestartSpotify = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,21 +138,11 @@ namespace SnipForMammal
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(89, 43);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // SnipForMammal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(245, 78);
-            this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SnipForMammal";
             this.Text = "Snip For Mammal";
@@ -177,7 +166,6 @@ namespace SnipForMammal
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Settings;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CustomText;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RestartSpotify;
-        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -17,7 +17,7 @@ namespace SnipForMammal
         private delegate void SafeCallTextDelegate(string text);
         private delegate void SafeCallToolStripMenuDelegate(ToolStripMenuItemSpotifyTrack item);
 
-        private SpotifyTrack CurrentPlayingTrack;
+        private SpotifyTrack currentTrack;
         private SpotifyTrack lastHistoryTrackAdded;
 
         private Timer updateCurrentTrackPlayingTimer;
@@ -74,22 +74,21 @@ namespace SnipForMammal
 
         private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Tick UpdateCurrentTrackPlayingTimer_Elapsed");
             // Check if the stored current playing track is different than the current
-            if (this.CurrentPlayingTrack != Global.spotify?.CurrentPlayingTrack)
+            if (this.currentTrack != Global.currentTrack)
             {
-                this.CurrentPlayingTrack = Global.spotify.CurrentPlayingTrack;
+                this.currentTrack = Global.currentTrack;
 
-                if (this.CurrentPlayingTrack == null)
+                if (this.currentTrack == null)
                 {
                     SetNotifyIconText("Snip For Mammal");
                     WriteToSnipFile(String.Empty);
                 }
                 else
                 {
-                    SetNotifyIconText(this.CurrentPlayingTrack.fullTitle);
-                    AddTrackToHistory(this.CurrentPlayingTrack);
-                    WriteToSnipFile(this.CurrentPlayingTrack.fullTitle);
+                    SetNotifyIconText(this.currentTrack.fullTitle);
+                    AddTrackToHistory(this.currentTrack);
+                    WriteToSnipFile(this.currentTrack.fullTitle);
                 }
             }
 

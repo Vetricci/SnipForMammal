@@ -73,5 +73,17 @@
             get;
             set;
         }
+
+        public static SpotifyTrack currentTrack
+        {
+            get;
+            set;
+        }
+
+        public static SpotifyTrack lastTrack
+        {
+            get;
+            set;
+        }
     }
 }

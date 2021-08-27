@@ -36,33 +36,6 @@ namespace SnipForMammal
         private IntPtr spotifyHandle = IntPtr.Zero;
         private string spotifyWindowTitle;
 
-        private SpotifyTrack lastPlayedTrack;
-        public SpotifyTrack LastPlayedTrack
-        {
-            get
-            {
-                return lastPlayedTrack;
-            }
-            set
-            {
-                this.lastPlayedTrack = value;
-            }
-        }
-
-        private SpotifyTrack currentPlayingTrack;
-        public SpotifyTrack CurrentPlayingTrack
-        {
-            get
-            {
-                return this.currentPlayingTrack;
-            }
-            set
-            {
-                this.currentPlayingTrack = value;
-            }
-        }
-
-
         public Spotify()
         {
             // Authorize SnipForMammal through Spotify API
@@ -158,7 +131,7 @@ namespace SnipForMammal
 
         private void UpdateSpotifyTrackInformation_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Tick UpdateSpotifyTrackInformation_Elapsed");
+            Console.WriteLine("Fetching Spotify Track Information");
 
             // Check for interval change
             if (updateSpotifyTrackInfo.Interval != Global.updateSpotifyTrackInfoInterval)
@@ -184,15 +157,15 @@ namespace SnipForMammal
                     {
                         // Is this a new track?
                         SpotifyTrack newTrack = new SpotifyTrack(jsonSummary);
-                        if (newTrack.ToString() != currentPlayingTrack?.ToString())
+                        if (newTrack.ToString() != Global.currentTrack?.ToString())
                         {
                             // Update last played track
                             Global.IsTextOverriden = false;
-                            this.lastPlayedTrack = this.currentPlayingTrack;
-                            this.currentPlayingTrack = newTrack;
+                            Global.lastTrack = Global.currentTrack;
+                            Global.currentTrack = newTrack;
 
                             //ResetUpdateAuthTokenTimer();
-                            Global.log.WriteLine("Now playing: " + currentPlayingTrack.ToString());
+                            Global.log.WriteLine("Now playing: " + Global.currentTrack?.ToString());
                         }
                         else
                         {
@@ -512,7 +485,10 @@ namespace SnipForMammal
                     Global.log.WriteLine("Reset requested. Reason: Spotify is paused.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
-                    if (!Global.IsTextOverriden) { this.CurrentPlayingTrack = null; }
+                    if (!Global.IsTextOverriden) 
+                    { 
+                        Global.currentTrack = null;
+                    }
                     break;
 
                 case ResetReason.NotNewSong:
@@ -546,7 +522,7 @@ namespace SnipForMammal
         public void CustomTrack(string text)
         {
             Global.log.WriteLine("Setting custom track: " + text);
-            this.CurrentPlayingTrack = new SpotifyTrack(text);
+            Global.currentTrack = new SpotifyTrack(text);
         }
 
         #region Extern
