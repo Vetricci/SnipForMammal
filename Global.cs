@@ -8,7 +8,7 @@
             set;
         }
 
-        public static DebugConsole debugConsole
+        public static Log log
         {
             get;
             set;
@@ -69,6 +69,18 @@
         }
     
         public static bool IsTextOverriden
+        {
+            get;
+            set;
+        }
+
+        public static SpotifyTrack currentTrack
+        {
+            get;
+            set;
+        }
+
+        public static SpotifyTrack lastTrack
         {
             get;
             set;

@@ -17,7 +17,7 @@ namespace SnipForMammal
         private delegate void SafeCallTextDelegate(string text);
         private delegate void SafeCallToolStripMenuDelegate(ToolStripMenuItemSpotifyTrack item);
 
-        private SpotifyTrack CurrentPlayingTrack;
+        private SpotifyTrack currentTrack;
         private SpotifyTrack lastHistoryTrackAdded;
 
         private Timer updateCurrentTrackPlayingTimer;
@@ -56,7 +56,7 @@ namespace SnipForMammal
 
         private void WriteToSnipFile(string text)
         {
-            Global.debugConsole?.WriteLine("Writting to Snip File: " + text);
+            Global.log?.WriteLine("Writting to Snip File: " + text);
 
             using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
             {
@@ -75,20 +75,20 @@ namespace SnipForMammal
         private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             // Check if the stored current playing track is different than the current
-            if (this.CurrentPlayingTrack != Global.spotify?.CurrentPlayingTrack)
+            if (this.currentTrack != Global.currentTrack)
             {
-                this.CurrentPlayingTrack = Global.spotify.CurrentPlayingTrack;
+                this.currentTrack = Global.currentTrack;
 
-                if (this.CurrentPlayingTrack == null)
+                if (this.currentTrack == null)
                 {
                     SetNotifyIconText("Snip For Mammal");
                     WriteToSnipFile(String.Empty);
                 }
                 else
                 {
-                    SetNotifyIconText(this.CurrentPlayingTrack.fullTitle);
-                    AddTrackToHistory(this.CurrentPlayingTrack);
-                    WriteToSnipFile(this.CurrentPlayingTrack.fullTitle);
+                    SetNotifyIconText(this.currentTrack.fullTitle);
+                    AddTrackToHistory(this.currentTrack);
+                    WriteToSnipFile(this.currentTrack.fullTitle);
                 }
             }
 
@@ -103,11 +103,6 @@ namespace SnipForMammal
         private void toolStripMenuItem_ForceUpdate_Click(object sender, EventArgs e)
         {
             Global.spotify.ForceUpdate();
-        }
-
-        private void toolStripMenuItem_ShowDebug_Click(object sender, EventArgs e)
-        {
-            Global.debugConsole?.Show();
         }
 
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
@@ -165,7 +160,7 @@ namespace SnipForMammal
 
 
             // Add new Track History item to the list.
-            Global.debugConsole?.WriteLine("Adding track to history: " + track.fullTitle);
+            Global.log?.WriteLine("Adding track to history: " + track.fullTitle);
             lastHistoryTrackAdded = track;
             AddDropDownItemsToMenu(toolStripMenuItem);
         }
@@ -192,7 +187,7 @@ namespace SnipForMammal
             if (!string.IsNullOrEmpty(track.uri))
             {
                 Clipboard.SetText(track.uri);
-                Global.debugConsole?.WriteLine("Copied track URI - " + track.uri);
+                Global.log?.WriteLine("Copied track URI - " + track.uri);
             }
         }
 
@@ -205,7 +200,7 @@ namespace SnipForMammal
             if (!string.IsNullOrEmpty(track.fullTitle))
             {
                 Clipboard.SetText(track.fullTitle);
-                Global.debugConsole?.WriteLine("Copied track FullTitle - " + track.fullTitle);
+                Global.log?.WriteLine("Copied track FullTitle - " + track.fullTitle);
             }
         }
 
@@ -278,12 +273,12 @@ namespace SnipForMammal
 
         private bool KillSpotifyTasks()
         {
-            Global.debugConsole?.WriteLine("Killing all Spotify processes.");
+            Global.log?.WriteLine("Killing all Spotify processes.");
             bool processAlive = false;
 
             // Fetch all Spotify processes
             Process[] allRunningProcesses = Process.GetProcessesByName("Spotify");
-            Global.debugConsole?.WriteLine("Found " + allRunningProcesses.Length + " processes");
+            Global.log?.WriteLine("Found " + allRunningProcesses.Length + " processes");
 
             if (allRunningProcesses.Length > 0)
             {
@@ -291,7 +286,7 @@ namespace SnipForMammal
                 // Kill all running Spotify processes
                 foreach (Process process in allRunningProcesses)
                 {
-                    Global.debugConsole?.WriteLine("    Killing PID " + process.Id);
+                    Global.log?.WriteLine("    Killing PID " + process.Id);
                     process.Kill();
                 }
 
@@ -303,12 +298,12 @@ namespace SnipForMammal
                 if (allRunningProcesses.Length > 0)
                 {
                     processAlive = true;
-                    Global.debugConsole?.WriteLine("Not all Spotify processes were terminated. Manual termination needed in Task Manager.");
+                    Global.log?.WriteLine("Not all Spotify processes were terminated. Manual termination needed in Task Manager.");
                 }
                 else
                 {
                     processAlive = false;
-                    Global.debugConsole?.WriteLine("All Spotify processes successfully terminated.");
+                    Global.log?.WriteLine("All Spotify processes successfully terminated.");
                 }
             }
 
@@ -317,7 +312,7 @@ namespace SnipForMammal
 
         private void LaunchSpotify()
         {
-            Global.debugConsole?.WriteLine("Launching Spotify.");
+            Global.log?.WriteLine("Launching Spotify.");
             Process.Start("Spotify");
         }
 
@@ -349,7 +344,7 @@ namespace SnipForMammal
                     dynamic tag_name = (string)json.tag_name;
                     string versionGit = tag_name + ".0.0";
 
-                    Global.debugConsole?.WriteLine("Git version " + versionGit);
+                    Global.log?.WriteLine("Git version " + versionGit);
                     if (versionGit != Application.ProductVersion)
                     {
                         toolStripMenuItem_Version.Text = "New update available!";
@@ -359,8 +354,8 @@ namespace SnipForMammal
             }
             catch (WebException webException)
             {
-                Global.debugConsole?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
-                Global.debugConsole?.WriteLine("     Exception Message: " + webException.Message);
+                Global.log?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
+                Global.log?.WriteLine("     Exception Message: " + webException.Message);
             }
         }
     }
