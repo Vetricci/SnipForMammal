@@ -30,16 +30,11 @@ namespace SnipForMammal
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             InitializeComponent();
-            InitializeSnipFile(); 
-            ConfigureUpdateCurrentTrackPlayingTimer();
-
-            // Add the version to Version toolstripmenuitem
-            Version ver = new Version(Application.ProductVersion);
-            string version = string.Format("v{0}.{1}", ver.Major, ver.Minor);
-            toolStripMenuItem_Version.Text += version;
-
-            // Check for updates;
+            InitializeSnipFile();
+            SetToolStripVersion();
             CheckIfUpdateAvailable();
+
+            ConfigureUpdateCurrentTrackPlayingTimer();
         }
 
         private void InitializeSnipFile()
@@ -319,6 +314,14 @@ namespace SnipForMammal
         private void toolStripMenuItem_Version_Click(object sender, EventArgs e)
         {
             Process.Start(@"https://github.com/Vetricci/SnipForMammal/releases/latest");
+        }
+
+        private void SetToolStripVersion()
+        {
+            // Add the version to Version toolstripmenuitem
+            Version ver = new Version(Application.ProductVersion);
+            string version = string.Format("v{0}.{1}", ver.Major, ver.Minor);
+            toolStripMenuItem_Version.Text += version;
         }
 
         private void CheckIfUpdateAvailable()
