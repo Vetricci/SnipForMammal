@@ -52,11 +52,28 @@ namespace SnipForMammal
         private void WriteToSnipFile(string text)
         {
             Global.log?.WriteLine("Writting to Snip File: " + text);
-
             using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
             {
-                sw.WriteLine(text);
+                try
+                {
+                    sw.WriteLine(text);
+                }
+                catch (IOException ioException)
+                {
+                    Global.log?.WriteLine("IOException");
+                    Global.log?.WriteLine("-------------------");
+                    Global.log?.WriteLine(ioException.Message);
+                    Global.log?.WriteLine("-------------------");
+                }
+                catch (Exception e)
+                {
+                    Global.log?.WriteLine("Exception");
+                    Global.log?.WriteLine("-------------------");
+                    Global.log?.WriteLine(e.Message);
+                    Global.log?.WriteLine("-------------------");
+                }
             }
+            Global.log?.WriteLine("Text written.");
         }
 
         private void ConfigureUpdateCurrentTrackPlayingTimer()
@@ -76,14 +93,14 @@ namespace SnipForMammal
 
                 if (this.currentTrack == null)
                 {
-                    SetNotifyIconText("Snip For Mammal");
                     WriteToSnipFile(String.Empty);
+                    SetNotifyIconText("Snip For Mammal");
                 }
                 else
                 {
+                    WriteToSnipFile(this.currentTrack.fullTitle);
                     SetNotifyIconText(this.currentTrack.fullTitle);
                     AddTrackToHistory(this.currentTrack);
-                    WriteToSnipFile(this.currentTrack.fullTitle);
                 }
             }
 
@@ -221,6 +238,7 @@ namespace SnipForMammal
                 {
                     t.GetMethod("UpdateIcon", hidden).Invoke(this.notifyIcon, new object[] { true });
                 }
+                Global.log?.WriteLine("Setting icon text: " + text);
             }
         }
 
