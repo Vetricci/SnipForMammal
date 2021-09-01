@@ -26,16 +26,50 @@ namespace SnipForMammal
 
         public SnipForMammal()
         {
-            // Handles app exit
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             InitializeComponent();
             InitializeSnipFile();
             SetToolStripVersion();
             CheckIfUpdateAvailable();
-
             ConfigureUpdateCurrentTrackPlayingTimer();
         }
+
+
+        #region Timers
+
+        private void ConfigureUpdateCurrentTrackPlayingTimer()
+        {
+            this.updateCurrentTrackPlayingTimer = new Timer(Global.updateCurrentTrackPlayingInterval);
+            this.updateCurrentTrackPlayingTimer.AutoReset = true;
+            this.updateCurrentTrackPlayingTimer.Elapsed += this.UpdateCurrentTrackPlayingTimer_Elapsed;
+            this.updateCurrentTrackPlayingTimer.Enabled = true;
+        }
+
+        private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // Check if the stored current playing track is different than the current
+            if (this.currentTrack != Global.currentTrack)
+            {
+                this.currentTrack = Global.currentTrack;
+
+                if (this.currentTrack == null)
+                {
+                    WriteToSnipFile(String.Empty);
+                    SetNotifyIconText("Snip For Mammal");
+                }
+                else
+                {
+                    WriteToSnipFile(this.currentTrack.fullTitle);
+                    SetNotifyIconText(this.currentTrack.fullTitle);
+                    AddTrackToHistory(this.currentTrack);
+                }
+            }
+
+        }
+
+        #endregion Timers
+
 
         private void InitializeSnipFile()
         {
@@ -76,33 +110,118 @@ namespace SnipForMammal
             Global.log?.WriteLine("Text written.");
         }
 
-        private void ConfigureUpdateCurrentTrackPlayingTimer()
+        private void SetNotifyIconText(string text)
         {
-            this.updateCurrentTrackPlayingTimer = new Timer(Global.updateCurrentTrackPlayingInterval);
-            this.updateCurrentTrackPlayingTimer.AutoReset = true;
-            this.updateCurrentTrackPlayingTimer.Elapsed += this.UpdateCurrentTrackPlayingTimer_Elapsed;
-            this.updateCurrentTrackPlayingTimer.Enabled = true;
+            if (this.InvokeRequired)
+            {
+                var del = new SafeCallTextDelegate(SetNotifyIconText);
+                this.Invoke(del, text);
+            }
+            else
+            {
+                // NotifyIcon.Text is limited to 64 char by a Windows API limitation, this gets around it using System.Reflection.
+                if (text.Length >= 128)
+                {
+                    text = text.Substring(0, 127);
+                }
+
+                Type t = typeof(NotifyIcon);
+                BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;
+                t.GetField("text", hidden).SetValue(this.notifyIcon, text);
+                if ((bool)t.GetField("added", hidden).GetValue(this.notifyIcon))
+                {
+                    t.GetMethod("UpdateIcon", hidden).Invoke(this.notifyIcon, new object[] { true });
+                }
+                Global.log?.WriteLine("Setting icon text: " + text);
+            }
+        }
+        
+
+        #region FormActions
+        private void SnipForMammal_Load(object sender, EventArgs e)
+        {
+            this.Hide();
         }
 
-        private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void SnipForMammal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Check if the stored current playing track is different than the current
-            if (this.currentTrack != Global.currentTrack)
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                this.currentTrack = Global.currentTrack;
-
-                if (this.currentTrack == null)
-                {
-                    WriteToSnipFile(String.Empty);
-                    SetNotifyIconText("Snip For Mammal");
-                }
-                else
-                {
-                    WriteToSnipFile(this.currentTrack.fullTitle);
-                    SetNotifyIconText(this.currentTrack.fullTitle);
-                    AddTrackToHistory(this.currentTrack);
-                }
+                e.Cancel = true;
+                this.Hide();
             }
+
+            InitializeSnipFile();
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            // Prepare Snip file for next time use.
+            InitializeSnipFile();
+        }
+
+        #endregion FormActions
+
+
+        #region ToolStripActions
+        private void toolStripMenuItem_Version_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"https://github.com/Vetricci/SnipForMammal/releases/latest");
+        }
+
+        private void toolStripMenuItem_TrackHistoryClick_CopyLink(object sender, MouseEventArgs e)
+        {
+            // Copy the track's URI to clipboard. The SpotifyTrack is stored in the Tag property of the control.
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            SpotifyTrack track = (SpotifyTrack)toolStripMenuItem.Tag;
+
+            if (!string.IsNullOrEmpty(track.uri))
+            {
+                Clipboard.SetText(track.uri);
+                Global.log?.WriteLine("Copied track URI - " + track.uri);
+            }
+        }
+
+        private void toolStripMenuItem_TrackHistoryClick_CopyFullTitle(object sender, MouseEventArgs e)
+        {
+            // Copy the track's full title to clipboard. The SpotifyTrack is stored in the Tag property of the control.
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            SpotifyTrack track = (SpotifyTrack)toolStripMenuItem.Tag;
+
+            if (!string.IsNullOrEmpty(track.fullTitle))
+            {
+                Clipboard.SetText(track.fullTitle);
+                Global.log?.WriteLine("Copied track FullTitle - " + track.fullTitle);
+            }
+        }
+
+        private void toolStripMenuItem_CustomText_Click(object sender, EventArgs e)
+        {
+            Global.customTextEntryForm.Show();
+        }
+
+        private void toolStripMenuItem_Settings_Click(object sender, EventArgs e)
+        {
+            Global.settings?.Show();
+        }
+
+        private void toolStripMenuItem_ForceUpdate_Click(object sender, EventArgs e)
+        {
+            Global.spotify.ForceUpdate();
+        }
+
+        private void toolStripMenuItem_RestartSpotify_Click(object sender, EventArgs e)
+        {
+            bool result = KillSpotifyTasks();
+            if (!result)
+            {
+                LaunchSpotify();
+            }
+            else
+            {
+                MessageBox.Show("There was a problem closing all Spotify processes. Please close them manually in Task Manager.");
+            }
+
 
         }
 
@@ -112,14 +231,55 @@ namespace SnipForMammal
             Application.Exit();
         }
 
-        private void toolStripMenuItem_ForceUpdate_Click(object sender, EventArgs e)
+        #endregion ToolStripActions
+
+
+        #region ToolStripActionHelpers
+
+        private void SetToolStripVersion()
         {
-            Global.spotify.ForceUpdate();
+            // Add the version to Version toolstripmenuitem
+            Version ver = new Version(Application.ProductVersion);
+            string version = string.Format("v{0}.{1}", ver.Major, ver.Minor);
+            toolStripMenuItem_Version.Text += version;
         }
 
-        private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
+        private void CheckIfUpdateAvailable()
         {
-            Global.settings?.Show();
+            try
+            {
+                using (WebClientWithShortTimeout jsonWebClient = new WebClientWithShortTimeout())
+                {
+                    string urlGithubApi = @"https://api.github.com/repos/Vetricci/SnipForMammal/releases/latest";
+                    string downloadedJson = string.Empty;
+
+                    // Prepare web client
+                    jsonWebClient.Headers.Add("User-Agent", "SnipForMammal/v1");
+                    jsonWebClient.Encoding = System.Text.Encoding.UTF8;
+
+                    // Fetch JSON
+                    downloadedJson = jsonWebClient.DownloadString(urlGithubApi);
+
+                    // Deserialize JSON
+                    dynamic json = SimpleJson.DeserializeObject(downloadedJson);
+
+                    // Get version
+                    dynamic tag_name = (string)json.tag_name;
+                    string versionGit = tag_name + ".0.0";
+
+                    Global.log?.WriteLine("Git version " + versionGit);
+                    if (versionGit != Application.ProductVersion)
+                    {
+                        toolStripMenuItem_Version.Text = "New update available!";
+                        toolStripMenuItem_Version.Enabled = true;
+                    }
+                }
+            }
+            catch (WebException webException)
+            {
+                Global.log?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
+                Global.log?.WriteLine("     Exception Message: " + webException.Message);
+            }
         }
 
         private void AddTrackToHistory(SpotifyTrack track)
@@ -149,7 +309,7 @@ namespace SnipForMammal
                 ToolTipText = "Copies Spotify link to your clipboard.",
                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             };
-            toolStripMenuItem_CopyLink.MouseClick += new MouseEventHandler(TrackHistoryClick_CopyLink);
+            toolStripMenuItem_CopyLink.MouseClick += new MouseEventHandler(toolStripMenuItem_TrackHistoryClick_CopyLink);
 
             // Copy track full title menu
             ToolStripMenuItemSpotifyTrack toolStripMenuItem_CopyFullTitle = new ToolStripMenuItemSpotifyTrack
@@ -162,7 +322,7 @@ namespace SnipForMammal
                 ToolTipText = "Copies song name and artists to your clipboard.",
                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             };
-            toolStripMenuItem_CopyFullTitle.MouseClick += new MouseEventHandler(TrackHistoryClick_CopyFullTitle);
+            toolStripMenuItem_CopyFullTitle.MouseClick += new MouseEventHandler(toolStripMenuItem_TrackHistoryClick_CopyFullTitle);
 
             // Add the "Copy track" menus to our Track History menu
             toolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
@@ -188,100 +348,6 @@ namespace SnipForMammal
             {
                 this.toolStripMenuItem_TrackHistory.DropDownItems.Add(item);
             }
-        }
-
-        private void TrackHistoryClick_CopyLink(object sender, MouseEventArgs e)
-        {
-            // Copy the track's URI to clipboard. The SpotifyTrack is stored in the Tag property of the control.
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            SpotifyTrack track = (SpotifyTrack)toolStripMenuItem.Tag;
-
-            if (!string.IsNullOrEmpty(track.uri))
-            {
-                Clipboard.SetText(track.uri);
-                Global.log?.WriteLine("Copied track URI - " + track.uri);
-            }
-        }
-
-        private void TrackHistoryClick_CopyFullTitle(object sender, MouseEventArgs e)
-        {
-            // Copy the track's full title to clipboard. The SpotifyTrack is stored in the Tag property of the control.
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            SpotifyTrack track = (SpotifyTrack)toolStripMenuItem.Tag;
-
-            if (!string.IsNullOrEmpty(track.fullTitle))
-            {
-                Clipboard.SetText(track.fullTitle);
-                Global.log?.WriteLine("Copied track FullTitle - " + track.fullTitle);
-            }
-        }
-
-        private void SetNotifyIconText(string text)
-        {
-            if (this.InvokeRequired)
-            {
-                var del = new SafeCallTextDelegate(SetNotifyIconText);
-                this.Invoke(del, text);
-            }
-            else
-            {
-                // NotifyIcon.Text is limited to 64 char by a Windows API limitation, this gets around it using System.Reflection.
-                if (text.Length >= 128)
-                {
-                    text = text.Substring(0, 127);
-                }
-
-                Type t = typeof(NotifyIcon);
-                BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;
-                t.GetField("text", hidden).SetValue(this.notifyIcon, text);
-                if ((bool)t.GetField("added", hidden).GetValue(this.notifyIcon))
-                {
-                    t.GetMethod("UpdateIcon", hidden).Invoke(this.notifyIcon, new object[] { true });
-                }
-                Global.log?.WriteLine("Setting icon text: " + text);
-            }
-        }
-
-        private void SnipForMammal_Load(object sender, EventArgs e)
-        {
-            this.Hide();
-        }
-
-        private void SnipForMammal_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                this.Hide();
-            }
-
-            InitializeSnipFile();
-        }
-
-        private void toolStripMenuItem_CustomText_Click(object sender, EventArgs e)
-        {
-            Global.customTextEntryForm.Show();
-        }
-
-        private void OnApplicationExit(object sender, EventArgs e)
-        {
-            // Prepare Snip file for next time use.
-            InitializeSnipFile();
-        }
-
-        private void toolStripMenuItem_RestartSpotify_Click(object sender, EventArgs e)
-        {
-            bool result = KillSpotifyTasks();
-            if (!result)
-            {
-                LaunchSpotify();
-            }
-            else
-            {
-                MessageBox.Show("There was a problem closing all Spotify processes. Please close them manually in Task Manager.");
-            }
-            
-            
         }
 
         private bool KillSpotifyTasks()
@@ -329,56 +395,7 @@ namespace SnipForMammal
             Process.Start("Spotify");
         }
 
-        private void toolStripMenuItem_Version_Click(object sender, EventArgs e)
-        {
-            Process.Start(@"https://github.com/Vetricci/SnipForMammal/releases/latest");
-        }
-
-        private void SetToolStripVersion()
-        {
-            // Add the version to Version toolstripmenuitem
-            Version ver = new Version(Application.ProductVersion);
-            string version = string.Format("v{0}.{1}", ver.Major, ver.Minor);
-            toolStripMenuItem_Version.Text += version;
-        }
-
-        private void CheckIfUpdateAvailable()
-        {
-            try
-            {
-                using (WebClientWithShortTimeout jsonWebClient = new WebClientWithShortTimeout())
-                {
-                    string urlGithubApi = @"https://api.github.com/repos/Vetricci/SnipForMammal/releases/latest";
-                    string downloadedJson = string.Empty;
-
-                    // Prepare web client
-                    jsonWebClient.Headers.Add("User-Agent", "SnipForMammal/v1");
-                    jsonWebClient.Encoding = System.Text.Encoding.UTF8;
-
-                    // Fetch JSON
-                    downloadedJson = jsonWebClient.DownloadString(urlGithubApi);
-
-                    // Deserialize JSON
-                    dynamic json = SimpleJson.DeserializeObject(downloadedJson);
-
-                    // Get version
-                    dynamic tag_name = (string)json.tag_name;
-                    string versionGit = tag_name + ".0.0";
-
-                    Global.log?.WriteLine("Git version " + versionGit);
-                    if (versionGit != Application.ProductVersion)
-                    {
-                        toolStripMenuItem_Version.Text = "New update available!";
-                        toolStripMenuItem_Version.Enabled = true;
-                    }
-                }
-            }
-            catch (WebException webException)
-            {
-                Global.log?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
-                Global.log?.WriteLine("     Exception Message: " + webException.Message);
-            }
-        }
+        #endregion ToolStripActionHelpers
     }
 
 

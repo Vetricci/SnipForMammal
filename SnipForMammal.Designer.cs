@@ -108,7 +108,7 @@ namespace SnipForMammal
             this.toolStripMenuItem_Settings.Name = "toolStripMenuItem_Settings";
             this.toolStripMenuItem_Settings.Size = new System.Drawing.Size(169, 22);
             this.toolStripMenuItem_Settings.Text = "Settings";
-            this.toolStripMenuItem_Settings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
+            this.toolStripMenuItem_Settings.Click += new System.EventHandler(this.toolStripMenuItem_Settings_Click);
             // 
             // toolStripMenuItem_ForceUpdate
             // 
