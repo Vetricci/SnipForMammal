@@ -83,7 +83,7 @@ namespace SnipForMammal
             if (this.InvokeRequired)
             {
                 var del = new SafeCallTextDelegate(SetNotifyIconText);
-                this.Invoke(del, text);
+                this.BeginInvoke(del, text);
             }
             else
             {
@@ -357,7 +357,7 @@ namespace SnipForMammal
             if (contextMenuStrip.InvokeRequired)
             {
                 var del = new SafeCallToolStripMenuDelegate(AddDropDownItemsToMenu);
-                contextMenuStrip.Invoke(del, item);
+                contextMenuStrip.BeginInvoke(del, item);
             }
             else
             {
