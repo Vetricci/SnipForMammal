@@ -48,6 +48,13 @@ namespace SnipForMammal
             ConfigureUpdateCurrentPlayingTrackTimer();
         }
 
+        private void Log(string text)
+        {
+            Global.log?.WriteLine("[Spotify] " + text);
+        }
+
+        #region Timers
+
         private void ConfigureUpdateAuthTokenTimer()
         {
             this.updateAuthToken = new Timer(Global.updateAuthTokenInterval);
@@ -55,7 +62,7 @@ namespace SnipForMammal
             this.updateAuthToken.AutoReset = true;
             this.updateAuthToken.Enabled = true;
             this.UpdateAuthToken_Elapsed(null, null); // Get initial token
-            Global.log.WriteLine("Timer updateAuthToken started. Interval " + Global.updateAuthTokenInterval + "ms");
+            Log("Timer updateAuthToken started. Interval " + Global.updateAuthTokenInterval + "ms");
         }
 
         private void ConfigureUpdateCurrentPlayingTrackTimer()
@@ -64,7 +71,7 @@ namespace SnipForMammal
             this.updateSpotifyTrackInfo.Elapsed += this.UpdateSpotifyTrackInformation_Elapsed;
             this.updateSpotifyTrackInfo.AutoReset = true;
             this.updateSpotifyTrackInfo.Enabled = true;
-            Global.log.WriteLine("Timer updateSpotifyTrackInformation started. Interval " + Global.updateSpotifyTrackInfoInterval + "ms");
+            Log("Timer updateSpotifyTrackInformation started. Interval " + Global.updateSpotifyTrackInfoInterval + "ms");
         }
 
         private void UpdateAuthToken_Elapsed(object sender, ElapsedEventArgs e)
@@ -75,7 +82,7 @@ namespace SnipForMammal
             if (updateAuthToken.Interval != Global.updateAuthTokenInterval)
             {
                 updateAuthToken.Interval = Global.updateAuthTokenInterval;
-                Global.log.WriteLine("Interval for timer updateAuthToken updated to " + Global.updateAuthTokenInterval + "ms");
+                Log("Interval for timer updateAuthToken updated to " + Global.updateAuthTokenInterval + "ms");
             }
 
             string downloadedJson = string.Empty;
@@ -112,32 +119,30 @@ namespace SnipForMammal
                     this.updateAuthToken.Interval = this.authorizationTokenExpiration * 1000.0;
 
                     // Debug output
-                    Global.log.WriteLine("authToken: " + this.authorizationToken);
-                    Global.log.WriteLine("authTokenExpiration: " + this.authorizationTokenExpiration);
-                    Global.log.WriteLine("refreshToken: " + this.refreshToken);
+                    Log("authToken: " + this.authorizationToken);
+                    Log("authTokenExpiration: " + this.authorizationTokenExpiration);
+                    Log("refreshToken: " + this.refreshToken);
                 }
             }
             else
             {
-                Global.log.WriteLine("Failed to obtain Json from Spotify Token API.");
+                Log("Failed to obtain Json from Spotify Token API.");
                 DisableAllTimers();
             }
 
             if (authorizationTokenExpiration > 0)
             {
-                Global.log.WriteLine("Auth token updated.");
+                Log("Auth token updated.");
             }
         }
 
         private void UpdateSpotifyTrackInformation_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Fetching Spotify Track Information");
-
             // Check for interval change
             if (updateSpotifyTrackInfo.Interval != Global.updateSpotifyTrackInfoInterval)
             {
                 updateSpotifyTrackInfo.Interval = Global.updateSpotifyTrackInfoInterval;
-                Global.log.WriteLine("Interval for timer updateSpotifyTrackInfo updated to " + Global.updateSpotifyTrackInfoInterval + "ms");
+                Log("Interval for timer updateSpotifyTrackInfo updated to " + Global.updateSpotifyTrackInfoInterval + "ms");
             }
 
             // Ensure Spotify is running otherwise reset.
@@ -165,7 +170,7 @@ namespace SnipForMammal
                             Global.currentTrack = newTrack;
 
                             //ResetUpdateAuthTokenTimer();
-                            Global.log.WriteLine("Now playing: " + Global.currentTrack?.ToString());
+                            Log("Now playing: " + Global.currentTrack?.ToString());
                         }
                         else
                         {
@@ -190,7 +195,7 @@ namespace SnipForMammal
 
         private void ResetUpdateAuthTokenTimer()
         {
-            Global.log.WriteLine("Resetting timer updateAuthToken.");
+            Log("Resetting timer updateAuthToken.");
             this.updateAuthToken.Enabled = false;
             this.updateAuthToken.Interval = Global.updateAuthTokenInterval;
             this.updateAuthToken.Enabled = true;
@@ -198,7 +203,7 @@ namespace SnipForMammal
 
         private void ResetUpdateSpotifyTrackInformationTimer()
         {
-            Global.log.WriteLine("Resetting timer updateSpotifyTrackInformation.");
+            Log("Resetting timer updateSpotifyTrackInformation.");
             this.updateSpotifyTrackInfo.Enabled = false;
             this.updateSpotifyTrackInfo.Interval = Global.updateSpotifyTrackInfoInterval;
             this.updateSpotifyTrackInfo.Enabled = true;
@@ -208,8 +213,10 @@ namespace SnipForMammal
         {
             updateAuthToken.Enabled = false;
             updateSpotifyTrackInfo.Enabled = false;
-            Global.log.WriteLine("Disabling all Snip timers");
+            Log("Disabling all Snip timers");
         }
+
+        #endregion Timers
 
         private bool IsSpotifyWindowDefaultText()
         {
@@ -357,11 +364,11 @@ namespace SnipForMammal
 
                                 }
                                 this.authorizationCode = nameValueCollection[keyValue];
-                                Global.log.WriteLine("Successfully authorized through Spotify Auth API.");
+                                Log("Successfully authorized through Spotify Auth API.");
                                 break;
                             case "error":
                                 outputString = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", callbackHtmlStart, spotifyAPIAccessDenied, callbackHtmlEnd);
-                                Global.log.WriteLine("Failed authorizing through Spotify Auth API.");
+                                Log("Failed authorizing through Spotify Auth API.");
                                 break;
                             default:
                                 break;
@@ -379,7 +386,7 @@ namespace SnipForMammal
             }
             catch (Exception e)
             {
-                Global.log.WriteLine(e.ToString());
+                Log(e.ToString());
             }
         }
 
@@ -397,7 +404,7 @@ namespace SnipForMammal
                     switch (spotifyAddressContactType)
                     {
                         case SpotifyAddressContactType.Authorization:
-                            Global.log.WriteLine("Downloading authorization json.");
+                            Log("Downloading authorization json.");
                             usePostMethodInsteadOfGet = true;
                             postParameters = string.Format(CultureInfo.InvariantCulture, "grant_type=authorization_code&code={0}&redirect_uri={1}", this.authorizationCode, this.localCallbackURL);
                             jsonWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -405,7 +412,7 @@ namespace SnipForMammal
                             break;
 
                         case SpotifyAddressContactType.AuthorizationRefresh:
-                            Global.log.WriteLine("Downloading refresh authorization json.");
+                            Log("Downloading refresh authorization json.");
                             usePostMethodInsteadOfGet = true;
                             postParameters = string.Format(CultureInfo.InvariantCulture, "grant_type=refresh_token&refresh_token={0}", this.refreshToken);
                             jsonWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -435,14 +442,14 @@ namespace SnipForMammal
 
                     if (downloadedJson.Length > 0 & downloadedJson.Length < 1000)
                     {
-                        Global.log.WriteLine(downloadedJson);
+                        Log(downloadedJson);
                     }
                     return downloadedJson;
                 }
                 catch (WebException webException)
                 {
-                    Global.log.WriteLine("WebException thrown in Spotify.DownloadJson()");
-                    Global.log.WriteLine("     Exception Message: " + webException.Message);
+                    Log("WebException thrown in Spotify.DownloadJson()");
+                    Log("     Exception Message: " + webException.Message);
 
                     // Catch "(503) Server Unavailable"
 
@@ -464,8 +471,8 @@ namespace SnipForMammal
                 }
                 catch (Exception e)
                 {
-                    Global.log.WriteLine("Generic exception thrown in DownloadJson()");
-                    Global.log.WriteLine("     Exception Message: " + e.Message);
+                    Log("Generic exception thrown in DownloadJson()");
+                    Log("     Exception Message: " + e.Message);
                     return string.Empty;
                 }
             }
@@ -476,13 +483,13 @@ namespace SnipForMammal
             switch (resetReason)
             {
                 case ResetReason.SpotifyNotLaunched:
-                    Global.log.WriteLine("Reset requested. Reason: Spotify is not launched.");
+                    Log("Reset requested. Reason: Spotify is not launched.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
                     break;
 
                 case ResetReason.SpotifyPaused:
-                    Global.log.WriteLine("Reset requested. Reason: Spotify is paused.");
+                    Log("Reset requested. Reason: Spotify is paused.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
                     if (!Global.IsTextOverriden) 
@@ -492,19 +499,19 @@ namespace SnipForMammal
                     break;
 
                 case ResetReason.NotNewSong:
-                    Global.log.WriteLine("Reset requested. Reason: Current song playing is not new.");
+                    Log("Reset requested. Reason: Current song playing is not new.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
                     break;
 
                 case ResetReason.InvalidJson:
-                    Global.log.WriteLine("Reset requested. Reason: Invalid Json.");
+                    Log("Reset requested. Reason: Invalid Json.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
                     break;
 
                 case ResetReason.ForceUpdateRequested:
-                    Global.log.WriteLine("Reset requested. Reason: Force update requested by user.");
+                    Log("Reset requested. Reason: Force update requested by user.");
                     this.spotifyRunning = false;
                     this.spotifyHandle = IntPtr.Zero;
                     ResetUpdateSpotifyTrackInformationTimer();
@@ -521,7 +528,7 @@ namespace SnipForMammal
 
         public void CustomTrack(string text)
         {
-            Global.log.WriteLine("Setting custom track: " + text);
+            Log("Setting custom track: " + text);
             Global.currentTrack = new SpotifyTrack(text);
         }
 

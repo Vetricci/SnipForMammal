@@ -35,41 +35,10 @@ namespace SnipForMammal
             ConfigureUpdateCurrentTrackPlayingTimer();
         }
 
-
-        #region Timers
-
-        private void ConfigureUpdateCurrentTrackPlayingTimer()
+        private void Log(string text)
         {
-            this.updateCurrentTrackPlayingTimer = new Timer(Global.updateCurrentTrackPlayingInterval);
-            this.updateCurrentTrackPlayingTimer.AutoReset = true;
-            this.updateCurrentTrackPlayingTimer.Elapsed += this.UpdateCurrentTrackPlayingTimer_Elapsed;
-            this.updateCurrentTrackPlayingTimer.Enabled = true;
+            Global.log?.WriteLine("[Snip] " + text);
         }
-
-        private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            // Check if the stored current playing track is different than the current
-            if (this.currentTrack != Global.currentTrack)
-            {
-                this.currentTrack = Global.currentTrack;
-
-                if (this.currentTrack == null)
-                {
-                    WriteToSnipFile(String.Empty);
-                    SetNotifyIconText("Snip For Mammal");
-                }
-                else
-                {
-                    WriteToSnipFile(this.currentTrack.fullTitle);
-                    SetNotifyIconText(this.currentTrack.fullTitle);
-                    AddTrackToHistory(this.currentTrack);
-                }
-            }
-
-        }
-
-        #endregion Timers
-
 
         private void InitializeSnipFile()
         {
@@ -85,7 +54,7 @@ namespace SnipForMammal
 
         private void WriteToSnipFile(string text)
         {
-            Global.log?.WriteLine("Writting to Snip File: " + text);
+            Log("Writting to Snip File: " + text);
             using (StreamWriter sw = new StreamWriter(this.snipFilePath, false))
             {
                 try
@@ -94,20 +63,19 @@ namespace SnipForMammal
                 }
                 catch (IOException ioException)
                 {
-                    Global.log?.WriteLine("IOException");
-                    Global.log?.WriteLine("-------------------");
-                    Global.log?.WriteLine(ioException.Message);
-                    Global.log?.WriteLine("-------------------");
+                    Log("IOException");
+                    Log("-------------------");
+                    Log(ioException.Message);
+                    Log("-------------------");
                 }
                 catch (Exception e)
                 {
-                    Global.log?.WriteLine("Exception");
-                    Global.log?.WriteLine("-------------------");
-                    Global.log?.WriteLine(e.Message);
-                    Global.log?.WriteLine("-------------------");
+                    Log("Exception");
+                    Log("-------------------");
+                    Log(e.Message);
+                    Log("-------------------");
                 }
             }
-            Global.log?.WriteLine("Text written.");
         }
 
         private void SetNotifyIconText(string text)
@@ -132,9 +100,56 @@ namespace SnipForMammal
                 {
                     t.GetMethod("UpdateIcon", hidden).Invoke(this.notifyIcon, new object[] { true });
                 }
-                Global.log?.WriteLine("Setting icon text: " + text);
+                Log("Setting icon text: " + text);
             }
         }
+
+
+        #region Timers
+
+        private void ConfigureUpdateCurrentTrackPlayingTimer()
+        {
+            this.updateCurrentTrackPlayingTimer = new Timer(Global.updateCurrentTrackPlayingInterval);
+            this.updateCurrentTrackPlayingTimer.AutoReset = true;
+            this.updateCurrentTrackPlayingTimer.Elapsed += this.UpdateCurrentTrackPlayingTimer_Elapsed;
+            this.updateCurrentTrackPlayingTimer.Enabled = true;
+        }
+
+        private void UpdateCurrentTrackPlayingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // Check if the stored current playing track is different than the current
+            if (this.currentTrack != Global.currentTrack)
+            {
+                DisableUpdateCurrentTrackPlayingTimer();
+                this.currentTrack = Global.currentTrack;
+
+                if (this.currentTrack == null)
+                {
+                    WriteToSnipFile(String.Empty);
+                    SetNotifyIconText("Snip For Mammal");
+                }
+                else
+                {
+                    WriteToSnipFile(this.currentTrack.fullTitle);
+                    SetNotifyIconText(this.currentTrack.fullTitle);
+                    AddTrackToHistory(this.currentTrack);
+                }
+
+                EnableUpdateCurrentTrackPlayingTimer();
+            }
+        }
+
+        private void DisableUpdateCurrentTrackPlayingTimer()
+        {
+            this.updateCurrentTrackPlayingTimer.Enabled = false;
+        }
+
+        private void EnableUpdateCurrentTrackPlayingTimer()
+        {
+            this.updateCurrentTrackPlayingTimer.Enabled = true;
+        }
+
+        #endregion Timers
         
 
         #region FormActions
@@ -178,7 +193,7 @@ namespace SnipForMammal
             if (!string.IsNullOrEmpty(track.uri))
             {
                 Clipboard.SetText(track.uri);
-                Global.log?.WriteLine("Copied track URI - " + track.uri);
+                Log("Copied track URI - " + track.uri);
             }
         }
 
@@ -191,7 +206,7 @@ namespace SnipForMammal
             if (!string.IsNullOrEmpty(track.fullTitle))
             {
                 Clipboard.SetText(track.fullTitle);
-                Global.log?.WriteLine("Copied track FullTitle - " + track.fullTitle);
+                Log("Copied track FullTitle - " + track.fullTitle);
             }
         }
 
@@ -267,7 +282,7 @@ namespace SnipForMammal
                     dynamic tag_name = (string)json.tag_name;
                     string versionGit = tag_name + ".0.0";
 
-                    Global.log?.WriteLine("Git version " + versionGit);
+                    Log("Git version " + versionGit);
                     if (versionGit != Application.ProductVersion)
                     {
                         toolStripMenuItem_Version.Text = "New update available!";
@@ -277,8 +292,8 @@ namespace SnipForMammal
             }
             catch (WebException webException)
             {
-                Global.log?.WriteLine("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
-                Global.log?.WriteLine("     Exception Message: " + webException.Message);
+                Log("WebException thrown in SnipForMammal.CheckIfUpdateAvailable()");
+                Log("     Exception Message: " + webException.Message);
             }
         }
 
@@ -332,9 +347,9 @@ namespace SnipForMammal
 
 
             // Add new Track History item to the list.
-            Global.log?.WriteLine("Adding track to history: " + track.fullTitle);
             lastHistoryTrackAdded = track;
             AddDropDownItemsToMenu(toolStripMenuItem);
+            Log("Adding track to history: " + track.fullTitle);
         }
 
         private void AddDropDownItemsToMenu(ToolStripMenuItemSpotifyTrack item)
@@ -352,12 +367,12 @@ namespace SnipForMammal
 
         private bool KillSpotifyTasks()
         {
-            Global.log?.WriteLine("Killing all Spotify processes.");
+            Log("Killing all Spotify processes.");
             bool processAlive = false;
 
             // Fetch all Spotify processes
             Process[] allRunningProcesses = Process.GetProcessesByName("Spotify");
-            Global.log?.WriteLine("Found " + allRunningProcesses.Length + " processes");
+            Log("Found " + allRunningProcesses.Length + " processes");
 
             if (allRunningProcesses.Length > 0)
             {
@@ -365,7 +380,7 @@ namespace SnipForMammal
                 // Kill all running Spotify processes
                 foreach (Process process in allRunningProcesses)
                 {
-                    Global.log?.WriteLine("    Killing PID " + process.Id);
+                    Log("    Killing PID " + process.Id);
                     process.Kill();
                 }
 
@@ -377,12 +392,12 @@ namespace SnipForMammal
                 if (allRunningProcesses.Length > 0)
                 {
                     processAlive = true;
-                    Global.log?.WriteLine("Not all Spotify processes were terminated. Manual termination needed in Task Manager.");
+                    Log("Not all Spotify processes were terminated. Manual termination needed in Task Manager.");
                 }
                 else
                 {
                     processAlive = false;
-                    Global.log?.WriteLine("All Spotify processes successfully terminated.");
+                    Log("All Spotify processes successfully terminated.");
                 }
             }
 
@@ -391,7 +406,7 @@ namespace SnipForMammal
 
         private void LaunchSpotify()
         {
-            Global.log?.WriteLine("Launching Spotify.");
+            Log("Launching Spotify.");
             Process.Start("Spotify");
         }
 
