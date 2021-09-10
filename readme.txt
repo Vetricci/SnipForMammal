@@ -11,6 +11,3 @@ Custom Text
 	
 Force Update
 	Forces an update to check for a song playing.
-	
-Show Debug Console
-	Shows the debug console containing useful information if something goes wrong.
